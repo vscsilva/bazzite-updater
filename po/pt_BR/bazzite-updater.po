@@ -220,7 +220,7 @@ msgctxt "@title"
 msgid "About Application"
 msgstr "Sobre o aplicativo"
 
-#: src/pages/AboutDataOS.qml:9 src/pages/Main.qml:216
+#: src/pages/AboutDataOS.qml:9 src/pages/Main.qml:210
 msgctxt "About (user's OS)"
 msgid "About %1"
 msgstr "Sobre %1"
@@ -230,58 +230,58 @@ msgctxt "@title:window"
 msgid "Bazzite Updater"
 msgstr "Atualizador do Bazzite"
 
-#: src/pages/Main.qml:159 src/pages/system_update/SystemUpdate.qml:20
-#: src/pages/system_update/SystemUpdate.qml:158
+#: src/pages/Main.qml:153 src/pages/system_update/SystemUpdate.qml:19
+#: src/pages/system_update/SystemUpdate.qml:215
 msgid "System Update"
 msgstr "Atualização do sistema"
 
-#: src/pages/Main.qml:171 src/pages/other_utils/OtherUtils.qml:19
-msgid "Other Utilities"
+#: src/pages/Main.qml:165
+msgid "Other utilities"
 msgstr "Outros utilitários"
 
-#: src/pages/Main.qml:183 src/pages/rebase_page/RebasePage.qml:165
-msgid "Rebase Helper"
+#: src/pages/Main.qml:177
+msgid "Rebase assistant"
 msgstr "Assistente de rebase"
 
-#: src/pages/Main.qml:195 src/pages/rss_feed/RssPage.qml:23
+#: src/pages/Main.qml:189 src/pages/rss_feed/RssPage.qml:23
 msgid "Announcements"
 msgstr "Avisos"
 
-#: src/pages/Main.qml:207 src/pages/settings/Settings.qml:17
+#: src/pages/Main.qml:201 src/pages/settings/Settings.qml:17
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/pages/Main.qml:225
+#: src/pages/Main.qml:219
 msgid "About Bazzite Updater"
 msgstr "Sobre o Atualizador do Bazzite"
 
-#: src/pages/Main.qml:238
-msgid "Reboot System"
+#: src/pages/Main.qml:232
+msgid "Reboot system"
 msgstr "Reiniciar o sistema"
 
-#: src/pages/Main.qml:249
-msgid "Quit"
+#: src/pages/Main.qml:243 src/pages/system_update/SystemUpdate.qml:139
+msgid "Exit"
 msgstr "Sair"
 
-#: src/pages/Main.qml:325
+#: src/pages/Main.qml:318
 msgctxt "@title:window"
 msgid "Reboot System"
 msgstr "Reiniciar o sistema"
 
-#: src/pages/Main.qml:330 src/pages/system_update/SystemUpdate.qml:106
+#: src/pages/Main.qml:323 src/pages/system_update/SystemUpdate.qml:166
 msgid "This will reboot the system."
 msgstr "O sistema será reiniciado."
 
-#: src/pages/Main.qml:335
+#: src/pages/Main.qml:328
 msgid "Reboot"
 msgstr "Reiniciar"
 
-#: src/pages/Main.qml:341 src/pages/Main.qml:422
+#: src/pages/Main.qml:334 src/pages/Main.qml:415
 #: src/pages/rebase_page/RebasePage.qml:359
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/pages/Main.qml:358
+#: src/pages/Main.qml:351
 msgid ""
 "The app was unable to reboot. Reboot through your system menu to apply "
 "changes."
@@ -289,20 +289,20 @@ msgstr ""
 "Não foi possível reiniciar o computador pelo aplicativo. Reinicie-o pelo "
 "menu do sistema para aplicar as alterações."
 
-#: src/pages/Main.qml:377
+#: src/pages/Main.qml:370
 msgid "Exit Application"
 msgstr "Sair do aplicativo"
 
-#: src/pages/Main.qml:382
+#: src/pages/Main.qml:375
 msgid "You must reboot to apply system updates."
 msgstr ""
 "Você precisa reiniciar o computador para aplicar as atualizações do sistema."
 
-#: src/pages/Main.qml:382
+#: src/pages/Main.qml:375
 msgid "No command is running, you may exit safely."
 msgstr "Nenhum comando está em execução; você pode sair com segurança."
 
-#: src/pages/Main.qml:385
+#: src/pages/Main.qml:378
 msgid ""
 "You should not exit the application until the running command completes. If "
 "you exit early, it may break your system."
@@ -310,7 +310,7 @@ msgstr ""
 "Não saia do aplicativo antes que o comando em execução termine. Sair antes "
 "pode danificar o sistema."
 
-#: src/pages/Main.qml:387
+#: src/pages/Main.qml:380
 msgid ""
 "If you exit the application before the running command completes, it may not "
 "apply its changes."
@@ -318,14 +318,19 @@ msgstr ""
 "Se você sair do aplicativo antes que o comando em execução termine, as "
 "alterações talvez não sejam aplicadas."
 
-#: src/pages/Main.qml:397
+#: src/pages/Main.qml:390
 msgid "Do not show this again"
 msgstr "Não mostrar novamente"
 
-#: src/pages/Main.qml:415
+#: src/pages/Main.qml:408
 msgctxt "dialog to exit the application"
 msgid "Exit"
 msgstr "Sair"
+
+#: src/pages/Main.qml:452
+msgctxt "progress bar displaying used storage space vs total available space"
+msgid "System disk space used — %1"
+msgstr "Espaço usado no disco do sistema — %1"
 
 #: src/pages/other_utils/FCLayeredPackages.qml:86
 msgid "Close layered packages view"
@@ -367,9 +372,12 @@ msgstr "Fechar a visualização dos pacotes em camadas"
 msgid "Remove selected packages"
 msgstr "Fechar a visualização dos pacotes em camadas"
 
+#: src/pages/other_utils/OtherUtils.qml:19
+msgid "Other Utilities"
+msgstr "Outros utilitários"
+
 #: src/pages/other_utils/OtherUtils.qml:27
 #: src/pages/rebase_page/RebasePage.qml:171
-#: src/pages/system_update/SystemUpdate.qml:86
 msgid "Toggle Console"
 msgstr "Mostrar/ocultar o console"
 
@@ -405,7 +413,7 @@ msgstr "Falha na reversão."
 #: src/pages/other_utils/OtherUtils.qml:255
 #: src/pages/other_utils/OtherUtils.qml:274
 #: src/pages/other_utils/OtherUtils.qml:308
-#: src/pages/system_update/SystemUpdate.qml:60
+#: src/pages/system_update/SystemUpdate.qml:74
 msgid "Open console"
 msgstr "Abrir console"
 
@@ -505,6 +513,10 @@ msgstr "%1 (tag atual)"
 msgctxt "List of tags classified as stable, testing, etc"
 msgid "List of %1 tags"
 msgstr "Lista de tags %1"
+
+#: src/pages/rebase_page/RebasePage.qml:165
+msgid "Rebase Helper"
+msgstr "Assistente de rebase"
 
 #: src/pages/rebase_page/RebasePage.qml:217
 msgid "Current System Image"
@@ -699,80 +711,184 @@ msgstr "Feed RSS de registros de alterações"
 msgid "Enable the system rebase page"
 msgstr "Ativar a página de rebase do sistema"
 
-#: src/pages/system_update/SystemUpdate.qml:47
+#: src/pages/system_update/SystemUpdate.qml:61
 msgid "Start update"
 msgstr "Iniciar atualização"
 
-#: src/pages/system_update/SystemUpdate.qml:52
+#: src/pages/system_update/SystemUpdate.qml:66
 msgid "System Updating"
 msgstr "Atualizando o sistema"
 
-#: src/pages/system_update/SystemUpdate.qml:54
+#: src/pages/system_update/SystemUpdate.qml:68
 msgid "Update Started"
 msgstr "Atualização iniciada"
 
-#: src/pages/system_update/SystemUpdate.qml:58
+#: src/pages/system_update/SystemUpdate.qml:72
 msgid "Update Failed."
 msgstr "Falha na atualização."
 
-#: src/pages/system_update/SystemUpdate.qml:60
+#: src/pages/system_update/SystemUpdate.qml:74
 msgid "Update Failed. Check console for more details."
 msgstr "Falha na atualização. Consulte o console para mais detalhes."
 
-#: src/pages/system_update/SystemUpdate.qml:68
+#: src/pages/system_update/SystemUpdate.qml:82
 msgid "Update Succeeded!"
 msgstr "Atualização concluída!"
 
-#: src/pages/system_update/SystemUpdate.qml:70
+#: src/pages/system_update/SystemUpdate.qml:84
 msgid "System Updated!"
 msgstr "Sistema atualizado!"
 
-#: src/pages/system_update/SystemUpdate.qml:74
-msgid "You must reboot to apply changes."
-msgstr "Você precisa reiniciar para aplicar as alterações."
-
-#: src/pages/system_update/SystemUpdate.qml:76
+#: src/pages/system_update/SystemUpdate.qml:92
 msgid "No reboot necessary."
 msgstr "Não é necessário reiniciar."
 
-#: src/pages/system_update/SystemUpdate.qml:103
+#: src/pages/system_update/SystemUpdate.qml:113
+msgid "Show Console"
+msgstr "Mostrar console"
+
+#: src/pages/system_update/SystemUpdate.qml:121
+msgid "Update Complete"
+msgstr "Atualização concluída"
+
+#: src/pages/system_update/SystemUpdate.qml:123
+msgid "Restart now to apply the system update, or exit and restart later."
+msgstr ""
+"Reinicie agora para aplicar a atualização do sistema ou saia e reinicie mais "
+"tarde."
+
+#: src/pages/system_update/SystemUpdate.qml:128
+msgid "Restart Now"
+msgstr "Reiniciar agora"
+
+#: src/pages/system_update/SystemUpdate.qml:164
 msgid "Update Error"
 msgstr "Erro de atualização"
 
-#: src/pages/system_update/SystemUpdate.qml:111
+#: src/pages/system_update/SystemUpdate.qml:171
 msgid "Ok"
 msgstr "OK"
 
-#: src/pages/system_update/SystemUpdate.qml:171
-msgid "Click to update System Image and Software"
-msgstr "Clique para atualizar a imagem do sistema e os programas"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Updating your system"
+msgstr "Atualizando o sistema"
 
-#: src/pages/system_update/SystemUpdate.qml:214
-msgctxt "label, last update to the system."
-msgid "Last Update"
-msgstr "Última atualização"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Update requires attention"
+msgstr "A atualização requer atenção"
 
-#: src/pages/system_update/SystemUpdate.qml:216
-msgid "Right now!"
-msgstr "Agora mesmo!"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Your system is up to date"
+msgstr "Seu sistema está atualizado"
 
-#: src/pages/system_update/SystemUpdate.qml:257
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Your system image and applications are being updated."
+msgstr "A imagem do sistema e os aplicativos estão sendo atualizados."
+
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Resolve the reported issue before trying again."
+msgstr "Resolva o problema indicado antes de tentar novamente."
+
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Your system image and applications are up to date."
+msgstr "A imagem do sistema e os aplicativos estão atualizados."
+
+#: src/pages/system_update/SystemUpdate.qml:267
+msgid "Last checked: %1"
+msgstr "Última verificação: %1"
+
+#: src/pages/system_update/SystemUpdate.qml:275
+msgid "Update Actions"
+msgstr "Ações de atualização"
+
+#: src/pages/system_update/SystemUpdate.qml:295
+msgid "Updating System…"
+msgstr "Atualizando o sistema…"
+
+#: src/pages/system_update/SystemUpdate.qml:295
+msgid "Update System"
+msgstr "Atualizar o sistema"
+
+#: src/pages/system_update/SystemUpdate.qml:304
+msgid "Refresh Status"
+msgstr "Atualizar status"
+
+#: src/pages/system_update/SystemUpdate.qml:311
+msgid "System update status refreshed."
+msgstr "Status da atualização do sistema atualizado."
+
+#: src/pages/system_update/SystemUpdate.qml:324
+msgid "Included components:"
+msgstr "Componentes incluídos:"
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Bazzite OS"
+msgstr "Sistema Bazzite"
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Flatpak Packages"
+msgstr "Pacotes Flatpak"
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Gaming components"
+msgstr "Componentes de jogos"
+
+#: src/pages/system_update/SystemUpdate.qml:360
 msgid "The System Update command is not defined."
 msgstr "O comando de atualização do sistema não foi definido."
 
-#: src/pages/system_update/SystemUpdate.qml:258
+#: src/pages/system_update/SystemUpdate.qml:361
 msgid "Make sure the config file (/etc/bazzite-updater/config.ini) is present."
 msgstr ""
 "Verifique se o arquivo de configuração (/etc/bazzite-updater/config.ini) "
 "existe."
 
-#: src/pages/system_update/SystemUpdate.qml:276
-msgctxt "progress bar displaying used storage space vs total available space"
-msgid "System Drive Used (%1)"
-msgstr "Espaço usado no disco do sistema (%1)"
-
-#: src/pages/system_update/SystemUpdate.qml:346
+#: src/pages/system_update/SystemUpdate.qml:404
 msgid "%1 Layered package"
 msgid_plural "%1 Layered packages"
 msgstr[0] "%1 pacote em camadas"
 msgstr[1] "%1 pacotes em camadas"
+
+#: src/pages/system_update/UpdateSteps.qml:37
+msgid "System"
+msgstr "Sistema"
+
+#: src/pages/system_update/UpdateSteps.qml:39
+msgid "Brew"
+msgstr "Brew"
+
+#: src/pages/system_update/UpdateSteps.qml:41
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: src/pages/system_update/UpdateSteps.qml:66
+msgid "Completed"
+msgstr "Concluído"
+
+#: src/pages/system_update/UpdateSteps.qml:66
+msgid "Failed"
+msgstr "Falhou"
+
+#~ msgid "You must reboot to apply changes."
+#~ msgstr "Você precisa reiniciar para aplicar as alterações."
+
+#~ msgid "Check for Updates"
+#~ msgstr "Verificar atualizações"
+
+#~ msgid "Quit"
+#~ msgstr "Sair"
+
+#~ msgid "Click to update System Image and Software"
+#~ msgstr "Clique para atualizar a imagem do sistema e os programas"
+
+#~ msgctxt "label, last update to the system."
+#~ msgid "Last Update"
+#~ msgstr "Última atualização"
+
+#~ msgid "Right now!"
+#~ msgstr "Agora mesmo!"
+
+#~ msgctxt ""
+#~ "progress bar displaying used storage space vs total available space"
+#~ msgid "System Drive Used (%1)"
+#~ msgstr "Espaço usado no disco do sistema (%1)"

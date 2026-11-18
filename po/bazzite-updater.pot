@@ -214,7 +214,7 @@ msgctxt "@title"
 msgid "About Application"
 msgstr ""
 
-#: src/pages/AboutDataOS.qml:9 src/pages/Main.qml:216
+#: src/pages/AboutDataOS.qml:9 src/pages/Main.qml:210
 msgctxt "About (user's OS)"
 msgid "About %1"
 msgstr ""
@@ -224,94 +224,99 @@ msgctxt "@title:window"
 msgid "Bazzite Updater"
 msgstr ""
 
-#: src/pages/Main.qml:159 src/pages/system_update/SystemUpdate.qml:20
-#: src/pages/system_update/SystemUpdate.qml:158
+#: src/pages/Main.qml:153 src/pages/system_update/SystemUpdate.qml:19
+#: src/pages/system_update/SystemUpdate.qml:215
 msgid "System Update"
 msgstr ""
 
-#: src/pages/Main.qml:171 src/pages/other_utils/OtherUtils.qml:19
-msgid "Other Utilities"
+#: src/pages/Main.qml:165
+msgid "Other utilities"
 msgstr ""
 
-#: src/pages/Main.qml:183 src/pages/rebase_page/RebasePage.qml:165
-msgid "Rebase Helper"
+#: src/pages/Main.qml:177
+msgid "Rebase assistant"
 msgstr ""
 
-#: src/pages/Main.qml:195 src/pages/rss_feed/RssPage.qml:23
+#: src/pages/Main.qml:189 src/pages/rss_feed/RssPage.qml:23
 msgid "Announcements"
 msgstr ""
 
-#: src/pages/Main.qml:207 src/pages/settings/Settings.qml:17
+#: src/pages/Main.qml:201 src/pages/settings/Settings.qml:17
 msgid "Settings"
 msgstr ""
 
-#: src/pages/Main.qml:225
+#: src/pages/Main.qml:219
 msgid "About Bazzite Updater"
 msgstr ""
 
-#: src/pages/Main.qml:238
-msgid "Reboot System"
+#: src/pages/Main.qml:232
+msgid "Reboot system"
 msgstr ""
 
-#: src/pages/Main.qml:249
-msgid "Quit"
+#: src/pages/Main.qml:243 src/pages/system_update/SystemUpdate.qml:139
+msgid "Exit"
 msgstr ""
 
-#: src/pages/Main.qml:325
+#: src/pages/Main.qml:318
 msgctxt "@title:window"
 msgid "Reboot System"
 msgstr ""
 
-#: src/pages/Main.qml:330 src/pages/system_update/SystemUpdate.qml:106
+#: src/pages/Main.qml:323 src/pages/system_update/SystemUpdate.qml:166
 msgid "This will reboot the system."
 msgstr ""
 
-#: src/pages/Main.qml:335
+#: src/pages/Main.qml:328
 msgid "Reboot"
 msgstr ""
 
-#: src/pages/Main.qml:341 src/pages/Main.qml:422
+#: src/pages/Main.qml:334 src/pages/Main.qml:415
 #: src/pages/rebase_page/RebasePage.qml:359
 msgid "Cancel"
 msgstr ""
 
-#: src/pages/Main.qml:358
+#: src/pages/Main.qml:351
 msgid ""
 "The app was unable to reboot. Reboot through your system menu to apply "
 "changes."
 msgstr ""
 
-#: src/pages/Main.qml:377
+#: src/pages/Main.qml:370
 msgid "Exit Application"
 msgstr ""
 
-#: src/pages/Main.qml:382
+#: src/pages/Main.qml:375
 msgid "You must reboot to apply system updates."
 msgstr ""
 
-#: src/pages/Main.qml:382
+#: src/pages/Main.qml:375
 msgid "No command is running, you may exit safely."
 msgstr ""
 
-#: src/pages/Main.qml:385
+#: src/pages/Main.qml:378
 msgid ""
 "You should not exit the application until the running command completes. If "
 "you exit early, it may break your system."
 msgstr ""
 
-#: src/pages/Main.qml:387
+#: src/pages/Main.qml:380
 msgid ""
 "If you exit the application before the running command completes, it may not "
 "apply its changes."
 msgstr ""
 
-#: src/pages/Main.qml:397
+#: src/pages/Main.qml:390
 msgid "Do not show this again"
 msgstr ""
 
-#: src/pages/Main.qml:415
+#: src/pages/Main.qml:408
 msgctxt "dialog to exit the application"
 msgid "Exit"
+msgstr ""
+
+#: src/pages/Main.qml:452
+msgctxt "progress bar displaying used storage space vs total available space"
+msgid "System disk space used — %1"
 msgstr ""
 
 #: src/pages/other_utils/FCLayeredPackages.qml:86
@@ -349,9 +354,12 @@ msgstr ""
 msgid "Remove selected packages"
 msgstr ""
 
+#: src/pages/other_utils/OtherUtils.qml:19
+msgid "Other Utilities"
+msgstr ""
+
 #: src/pages/other_utils/OtherUtils.qml:27
 #: src/pages/rebase_page/RebasePage.qml:171
-#: src/pages/system_update/SystemUpdate.qml:86
 msgid "Toggle Console"
 msgstr ""
 
@@ -385,7 +393,7 @@ msgstr ""
 #: src/pages/other_utils/OtherUtils.qml:255
 #: src/pages/other_utils/OtherUtils.qml:274
 #: src/pages/other_utils/OtherUtils.qml:308
-#: src/pages/system_update/SystemUpdate.qml:60
+#: src/pages/system_update/SystemUpdate.qml:74
 msgid "Open console"
 msgstr ""
 
@@ -477,6 +485,10 @@ msgstr ""
 #: src/pages/rebase_page/FCSystemImage.qml:194
 msgctxt "List of tags classified as stable, testing, etc"
 msgid "List of %1 tags"
+msgstr ""
+
+#: src/pages/rebase_page/RebasePage.qml:165
+msgid "Rebase Helper"
 msgstr ""
 
 #: src/pages/rebase_page/RebasePage.qml:217
@@ -663,78 +675,156 @@ msgstr ""
 msgid "Enable the system rebase page"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:47
+#: src/pages/system_update/SystemUpdate.qml:61
 msgid "Start update"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:52
+#: src/pages/system_update/SystemUpdate.qml:66
 msgid "System Updating"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:54
+#: src/pages/system_update/SystemUpdate.qml:68
 msgid "Update Started"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:58
+#: src/pages/system_update/SystemUpdate.qml:72
 msgid "Update Failed."
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:60
+#: src/pages/system_update/SystemUpdate.qml:74
 msgid "Update Failed. Check console for more details."
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:68
+#: src/pages/system_update/SystemUpdate.qml:82
 msgid "Update Succeeded!"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:70
+#: src/pages/system_update/SystemUpdate.qml:84
 msgid "System Updated!"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:74
-msgid "You must reboot to apply changes."
-msgstr ""
-
-#: src/pages/system_update/SystemUpdate.qml:76
+#: src/pages/system_update/SystemUpdate.qml:92
 msgid "No reboot necessary."
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:103
+#: src/pages/system_update/SystemUpdate.qml:113
+msgid "Show Console"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:121
+msgid "Update Complete"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:123
+msgid "Restart now to apply the system update, or exit and restart later."
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:128
+msgid "Restart Now"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:164
 msgid "Update Error"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:111
+#: src/pages/system_update/SystemUpdate.qml:171
 msgid "Ok"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:171
-msgid "Click to update System Image and Software"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Updating your system"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:214
-msgctxt "label, last update to the system."
-msgid "Last Update"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Update requires attention"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:216
-msgid "Right now!"
+#: src/pages/system_update/SystemUpdate.qml:245
+msgid "Your system is up to date"
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:257
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Your system image and applications are being updated."
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Resolve the reported issue before trying again."
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:251
+msgid "Your system image and applications are up to date."
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:267
+msgid "Last checked: %1"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:275
+msgid "Update Actions"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:295
+msgid "Updating System…"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:295
+msgid "Update System"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:304
+msgid "Refresh Status"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:311
+msgid "System update status refreshed."
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:324
+msgid "Included components:"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Bazzite OS"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Flatpak Packages"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:329
+msgid "Gaming components"
+msgstr ""
+
+#: src/pages/system_update/SystemUpdate.qml:360
 msgid "The System Update command is not defined."
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:258
+#: src/pages/system_update/SystemUpdate.qml:361
 msgid "Make sure the config file (/etc/bazzite-updater/config.ini) is present."
 msgstr ""
 
-#: src/pages/system_update/SystemUpdate.qml:276
-msgctxt "progress bar displaying used storage space vs total available space"
-msgid "System Drive Used (%1)"
-msgstr ""
-
-#: src/pages/system_update/SystemUpdate.qml:346
+#: src/pages/system_update/SystemUpdate.qml:404
 msgid "%1 Layered package"
 msgid_plural "%1 Layered packages"
 msgstr[0] ""
 msgstr[1] ""
+
+#: src/pages/system_update/UpdateSteps.qml:37
+msgid "System"
+msgstr ""
+
+#: src/pages/system_update/UpdateSteps.qml:39
+msgid "Brew"
+msgstr ""
+
+#: src/pages/system_update/UpdateSteps.qml:41
+msgid "Flatpak"
+msgstr ""
+
+#: src/pages/system_update/UpdateSteps.qml:66
+msgid "Completed"
+msgstr ""
+
+#: src/pages/system_update/UpdateSteps.qml:66
+msgid "Failed"
+msgstr ""
