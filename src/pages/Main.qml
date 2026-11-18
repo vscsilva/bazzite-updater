@@ -31,6 +31,7 @@ StatefulApp.StatefulWindow {
         actionQuit.triggered();
     }
 
+
     Shortcut {
         sequences: ["F11"]
         context: Qt.ApplicationShortcut
@@ -61,15 +62,6 @@ StatefulApp.StatefulWindow {
                 if (root.pageStack.currentItem.moreHandleInput(buttonId, button_down))
                     return;
 
-            switch (buttonId) {
-            case 1: // B
-            case 4: // view, minus
-            case 6: // pause, plus
-                if (button_down)
-                    globalDrawer.drawerOpen = !globalDrawer.drawerOpen;
-                return;
-            }
-
             if (globalDrawer.drawerOpen) {
                 globalDrawer.handleInput(buttonId, button_down);
                 return;
@@ -84,6 +76,11 @@ StatefulApp.StatefulWindow {
 
     globalDrawer: Kirigami.GlobalDrawer {
         id: globalDrawer
+
+        modal: false
+        drawerOpen: true
+        handleVisible: false
+        collapsible: false
 
         Behavior on width {
             NumberAnimation {
@@ -110,7 +107,7 @@ StatefulApp.StatefulWindow {
             }
             return maxWidth;
         }
-        width: getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4)
+        width: Math.max(Kirigami.Units.gridUnit * 14, getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4))
 
         Shortcut {
             sequences: [StandardKey.Back, StandardKey.Close, "F1", "Ctrl+M", "Escape"]
@@ -118,34 +115,31 @@ StatefulApp.StatefulWindow {
             onActivated: {
                 if (AppDialogManager.activeDialog)
                     AppDialogManager.activeDialog.reject();
-                else
-                    globalDrawer.drawerOpen = !globalDrawer.drawerOpen;
             }
         }
 
         Shortcut {
             sequences: ["Return"]
             context: Qt.ApplicationShortcut
-            enabled: globalDrawer.drawerOpen || AppDialogManager.activeDialog
+            enabled: AppDialogManager.activeDialog
             onActivated: {
                 if (AppDialogManager.activeDialog) {
                     AppDialogManager.activeDialog.accept();
-                } else
-                    globalDrawer.drawerOpen = false;
+                }
             }
         }
 
         Shortcut {
             sequences: ["Up"]
             context: Qt.ApplicationShortcut
-            enabled: globalDrawer.drawerOpen
+            enabled: globalDrawer.drawerOpen && !AppDialogManager.activeDialog
             onActivated: globalDrawer.__navigateGlobalDrawer(-1)
         }
 
         Shortcut {
             sequences: ["Down"]
             context: Qt.ApplicationShortcut
-            enabled: globalDrawer.drawerOpen
+            enabled: globalDrawer.drawerOpen && !AppDialogManager.activeDialog
             onActivated: globalDrawer.__navigateGlobalDrawer(1)
         }
 
@@ -168,7 +162,7 @@ StatefulApp.StatefulWindow {
             },
             Kirigami.Action {
 
-                text: i18n("Other Utilities")
+                text: i18n("Other utilities")
                 icon.name: "applications-accessories-symbolic"
 
                 checkable: true
@@ -180,7 +174,7 @@ StatefulApp.StatefulWindow {
                 enabled: AppConfig.ini.Rebase?.enabled === "true"
                 visible: enabled
 
-                text: i18n("Rebase Helper")
+                text: i18n("Rebase assistant")
                 icon.name: "system-reboot-symbolic"
 
                 checkable: true
@@ -235,7 +229,7 @@ StatefulApp.StatefulWindow {
             },
             Kirigami.Action {
                 id: actionReboot
-                text: i18n("Reboot System") + GP.Labels.spacer + GP.Labels.north
+                text: i18n("Reboot system") + GP.Labels.spacer + GP.Labels.north
                 icon.name: AppState.commandSucceeded ? "system-shutdown-update-symbolic" : "system-shutdown-symbolic"
 
                 enabled: !AppState.commandRunning
@@ -246,7 +240,7 @@ StatefulApp.StatefulWindow {
             },
             Kirigami.Action {
                 id: actionQuit
-                text: i18n("Quit") + GP.Labels.spacer + GP.Labels.west
+                text: i18n("Exit") + GP.Labels.spacer + GP.Labels.west
                 icon.name: "application-exit-symbolic"
                 shortcut: StandardKey.Quit
                 onTriggered: {
@@ -302,7 +296,6 @@ StatefulApp.StatefulWindow {
 
             switch (buttonId) {
             case 0: // A
-                drawerOpen = false;
                 break;
             case 2: // X
                 actionQuit.triggered();
@@ -442,6 +435,36 @@ StatefulApp.StatefulWindow {
                     skipRebootReminder.animateClick();
                 break;
             }
+        }
+    }
+
+    RowLayout {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Kirigami.Units.gridUnit
+        width: Math.min(parent.width - globalDrawer.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 38)
+        x: globalDrawer.width + Math.max(0, (parent.width - globalDrawer.width - width) / 2)
+        spacing: Kirigami.Units.gridUnit
+        z: 100
+
+        QQC2.Label {
+            Layout.alignment: Qt.AlignVCenter
+            text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+            font: Qt.font({
+                family: Kirigami.Theme.defaultFont.family,
+                pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.15,
+                weight: Kirigami.Theme.defaultFont.weight
+            })
+        }
+
+        QQC2.ProgressBar {
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 22
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+            Layout.preferredHeight: Kirigami.Units.smallMediumSpacing
+            Layout.alignment: Qt.AlignVCenter
+            from: 0
+            to: AppData.storageSpace.total
+            value: AppData.storageSpace.used
         }
     }
 
