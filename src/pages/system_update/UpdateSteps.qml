@@ -12,6 +12,8 @@ import io.github.rfrench3.bazzite_updater
 ColumnLayout {
     id: root
 
+    Layout.fillWidth: true
+
     Repeater {
         model: SystemUpdateBackend.updateStepsModel
 
@@ -22,14 +24,31 @@ ColumnLayout {
             required property int progress_total
             required property int exit_status
 
-            spacing: Kirigami.Units.gridUnit
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: Math.min(root.width, Kirigami.Units.gridUnit * 24)
+            spacing: Kirigami.Units.largeSpacing
 
             Label {
-                text: del.module.charAt(0).toUpperCase() + del.module.slice(1)
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 5
+                horizontalAlignment: Text.AlignLeft
+                text: {
+                    switch (del.module.toLowerCase()) {
+                    case "system":
+                        return i18n("System");
+                    case "brew":
+                        return i18n("Brew");
+                    case "flatpak":
+                        return i18n("Flatpak");
+                    default:
+                        return del.module.charAt(0).toUpperCase() + del.module.slice(1);
+                    }
+                }
             }
 
             ProgressBar {
-                Layout.fillWidth: true
+                Layout.fillWidth: visible
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 12
+                visible: del.exit_status === -1
                 indeterminate: del.progress_current === -1
                 value: del.progress_current
                 to: del.progress_total
@@ -40,6 +59,12 @@ ColumnLayout {
                         easing.type: Easing.InOutQuad
                     }
                 }
+            }
+
+            Label {
+                visible: del.exit_status !== -1
+                text: del.exit_status === 0 ? i18n("Completed") : i18n("Failed")
+                opacity: 0.75
             }
 
             Loader {
