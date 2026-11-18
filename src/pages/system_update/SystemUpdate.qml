@@ -16,8 +16,21 @@ import io.github.rfrench3.controllable as GP
 Kirigami.Page {
     id: page
 
-    // Global drawer gamepad labels are placed in the page titles
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("System Update")
+
+    property alias consoleDrawerOpen: consoleDrawer.drawerOpen
+    property string lastCheckedText: Qt.formatDate(new Date(), "d MMMM yyyy")
+    property bool updateStatusRefreshed: false
+
+
+    function toggleConsoleDrawer(open: bool): void {
+        if (open && !consoleDrawer.drawerOpen) {
+            for (let i = 0; i < 5; ++i) {
+                hidePassiveNotification();
+            }
+        }
+        consoleDrawer.drawerOpen = open;
+    }
 
     function handleInput(buttonId: int, button_down: bool): void {
         if (button_down == false)
@@ -36,80 +49,126 @@ Kirigami.Page {
 
         switch (buttonId) {
         case 3: // Y
-            toggleConsole.trigger();
+            toggleConsoleDrawer(!consoleDrawer.drawerOpen);
             break;
         }
     }
 
-    actions: [
-        Kirigami.Action {
-            id: updateAction
-            text: i18n("Start update") + GP.Labels.spacer + GP.Labels.south
-            shortcut: "Return"
-            enabled: AppState.allowCommands && !SystemUpdateBackend.blockUpdate && (AppConfig.ini.Commands?.systemUpdateCommand || "")
+    actions: []
 
-            onTriggered: {
-                sessionStorage.mainText = i18n("System Updating");
+    Kirigami.Action {
+        id: updateAction
+        text: i18n("Start update") + GP.Labels.spacer + GP.Labels.south
+        shortcut: "Return"
+        enabled: AppState.allowCommands && !SystemUpdateBackend.blockUpdate && (AppConfig.ini.Commands?.systemUpdateCommand || "")
 
-                showPassiveNotification(i18n("Update Started"), Kirigami.short);
-                SystemUpdateBackend.runUpdate(callback => {
-                    if (callback != 0) {
-                        if (consoleDrawer.drawerOpen) {
-                            showPassiveNotification(i18n("Update Failed."), Kirigami.short);
-                        } else {
-                            showPassiveNotification(i18n("Update Failed. Check console for more details."), Kirigami.long, i18n("Open console") + GP.Labels.spacer + GP.Labels.north, () => {
-                                toggleConsole.trigger();
-                            });
-                        }
-                        sessionStorage.mainText = "";
-                        return;
+        onTriggered: {
+            sessionStorage.mainText = i18n("System Updating");
+
+            showPassiveNotification(i18n("Update Started"), Kirigami.short);
+            SystemUpdateBackend.runUpdate(callback => {
+                if (callback != 0) {
+                    if (consoleDrawer.drawerOpen) {
+                        showPassiveNotification(i18n("Update Failed."), Kirigami.short);
+                    } else {
+                        showPassiveNotification(i18n("Update Failed. Check console for more details."), Kirigami.long, i18n("Open console") + GP.Labels.spacer + GP.Labels.north, () => {
+                            toggleConsoleDrawer(true);
+                        });
                     }
-
-                    showPassiveNotification(i18n("Update Succeeded!"), Kirigami.short);
-                    sessionStorage.updateCompleted = true;
-                    sessionStorage.mainText = i18n("System Updated!");
-
-                    AppData.reloadOstree(() => {
-                        if (!AppData.ostree.onLatestDeployment())
-                            showPassiveNotification(i18n("You must reboot to apply changes."), Kirigami.short);
-                        else
-                            showPassiveNotification(i18n("No reboot necessary."), Kirigami.short);
-                    });
-                }, errorMessage => {
-                    errorDialog.subtitle = errorMessage;
-                    AppDialogManager.show(errorDialog);
-                });
-            }
-        },
-        Kirigami.Action {
-            id: toggleConsole
-            text: i18n("Toggle Console") + GP.Labels.spacer + GP.Labels.north
-            shortcut: "F12"
-            onTriggered: {
-                // hide notifications when opening the drawer
-                if (!consoleDrawer.drawerOpen) {
-                    for (let i = 0; i < 5; ++i) {
-                        hidePassiveNotification();
-                    }
+                    sessionStorage.mainText = "";
+                    return;
                 }
 
-                consoleDrawer.drawerOpen = !consoleDrawer.drawerOpen;
+                showPassiveNotification(i18n("Update Succeeded!"), Kirigami.short);
+                sessionStorage.updateCompleted = true;
+                sessionStorage.mainText = i18n("System Updated!");
+
+                AppData.reloadOstree(() => {
+                    page.lastCheckedText = Qt.formatDate(new Date(), "d MMMM yyyy");
+                    page.updateStatusRefreshed = true;
+                    if (!AppData.ostree.onLatestDeployment())
+                        AppDialogManager.show(rebootAfterUpdateDialog);
+                    else
+                        showPassiveNotification(i18n("No reboot necessary."), Kirigami.short);
+                });
+            }, errorMessage => {
+                errorDialog.subtitle = errorMessage;
+                AppDialogManager.show(errorDialog);
+            });
+        }
+    }
+
+    titleDelegate: RowLayout {
+        width: page.width
+        spacing: Kirigami.Units.largeSpacing
+
+        Kirigami.Heading {
+            Layout.fillWidth: true
+            text: page.title
+            level: 2
+            elide: Text.ElideRight
+        }
+
+        QQC2.Switch {
+            text: i18n("Show Console")
+            checked: consoleDrawer.drawerOpen
+            onToggled: toggleConsoleDrawer(checked)
+        }
+    }
+
+    AppDialog {
+        id: rebootAfterUpdateDialog
+        titleStart: i18n("Update Complete")
+        standardButtons: Kirigami.Dialog.NoButton
+        subtitle: i18n("Restart now to apply the system update, or exit and restart later.")
+
+        customFooterActions: [
+            Kirigami.Action {
+                id: restartNowAction
+                text: i18n("Restart Now")
+                icon.name: "system-shutdown-symbolic"
+                onTriggered: {
+                    rebootAfterUpdateDialog.accept();
+                    AppState.rebootSystem(callback => {
+                        console.log("Reboot callback: " + callback);
+                    });
+                }
+            },
+            Kirigami.Action {
+                id: exitAfterUpdateAction
+                text: i18n("Exit")
+                icon.name: "application-exit-symbolic"
+                onTriggered: {
+                    rebootAfterUpdateDialog.accept();
+                    Qt.quit();
+                }
+            }
+        ]
+
+        function handleInput(buttonId, button_down) {
+            if (!button_down)
+                return;
+            switch (buttonId) {
+            case 0: // A
+                restartNowAction.trigger();
+                break;
+            case 1: // B
+                exitAfterUpdateAction.trigger();
+                break;
             }
         }
-    ]
+    }
 
     AppDialog {
         id: errorDialog
         titleStart: i18n("Update Error")
         standardButtons: Kirigami.Dialog.NoButton
-
         subtitle: i18n("This will reboot the system.")
 
         customFooterActions: [
             Kirigami.Action {
                 id: errorDialogConfirm
                 text: i18n("Ok") + GP.Labels.spacer + GP.Labels.south
-
                 onTriggered: errorDialog.accept()
             }
         ]
@@ -122,7 +181,7 @@ Kirigami.Page {
                 errorDialogConfirm.triggered();
                 break;
             case 1: // B
-                errorDialogConfirm.triggered();
+                errorDialog.reject();
                 break;
             }
         }
@@ -130,25 +189,23 @@ Kirigami.Page {
 
     ColumnLayout {
         id: pageContents
-        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-
+        width: Math.min(parent.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
         spacing: Kirigami.Units.gridUnit
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: Kirigami.Units.gridUnit * 3.5
+            spacing: Kirigami.Units.largeSpacing
 
             Item {
-                implicitWidth: Kirigami.Units.gridUnit * 5
-                implicitHeight: implicitWidth
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 5.5
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 5.5
 
                 Image {
                     anchors.fill: parent
-
                     source: (AppData.aboutDataOs.programLogo) ? "file:/" + AppData.aboutDataOs.programLogo : "qrc:/fallbackLogo"
-
                     sourceSize: Qt.size(width, height)
                     antialiasing: true
                 }
@@ -156,93 +213,139 @@ Kirigami.Page {
 
             Kirigami.Heading {
                 text: sessionStorage.mainText || i18n("System Update")
+                level: 1
             }
         }
 
         FC.FormCard {
-            id: updateFC
+            Layout.fillWidth: true
 
-            // Ensures the card does not act like it is width-constrained
-            // NOTE: The card's real width is currently bound by the fixed-width progress bar below this FC
-            maximumWidth: pageContents.implicitWidth - Kirigami.Units.smallSpacing
+            ColumnLayout {
+                spacing: 0
 
-            FC.FormButtonDelegate {
-                id: updateButton
-                text: i18n("Click to update System Image and Software")
-                enabled: updateAction.enabled
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.margins: Kirigami.Units.largeSpacing
+                    spacing: Kirigami.Units.largeSpacing
 
-                onClicked: {
-                    updateAction.trigger();
-                }
-
-                trailing: Loader {
-                    sourceComponent: {
-                        if (AppState.updateRunning)
-                            return busyComponent;
-                        if (AppState.commandSucceeded)
-                            return checkmarkComponent;
-                        return labelComponent;
+                    Kirigami.Icon {
+                        Layout.preferredWidth: Kirigami.Units.iconSizes.large
+                        Layout.preferredHeight: Kirigami.Units.iconSizes.large
+                        source: AppState.updateRunning ? "system-software-update-symbolic" : (SystemUpdateBackend.blockUpdate ? "dialog-error-symbolic" : "checkmark-symbolic")
+                        color: AppState.updateRunning ? Kirigami.Theme.highlightColor : Kirigami.Theme.positiveTextColor
                     }
 
-                    Component {
-                        id: busyComponent
-                        QQC2.BusyIndicator {
-                            id: busyIndicator
-                            running: AppState.updateRunning
-                        }
-                    }
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: Kirigami.Units.smallSpacing
 
-                    Component {
-                        id: checkmarkComponent
-                        Kirigami.Icon {
-                            source: "checkmark-symbolic"
-                            visible: sessionStorage.updateCompleted || false
-                        }
-                    }
-
-                    Component {
-                        id: labelComponent
                         Kirigami.Heading {
-                            text: GP.Labels.south
+                            Layout.fillWidth: true
+                            level: 3
+                            text: AppState.updateRunning ? i18n("Updating your system") : (SystemUpdateBackend.blockUpdate ? i18n("Update requires attention") : i18n("Your system is up to date"))
+                        }
+
+                        QQC2.Label {
+                            Layout.fillWidth: true
+                            wrapMode: Text.WordWrap
+                            text: AppState.updateRunning ? i18n("Your system image and applications are being updated.") : (SystemUpdateBackend.blockUpdate ? i18n("Resolve the reported issue before trying again.") : i18n("Your system image and applications are up to date."))
+                            opacity: 0.8
                         }
                     }
                 }
 
-                trailingLogo.visible: !AppState.updateRunning && !AppState.commandSucceeded
-
-                description: {
-                    const last_update = i18nc("label, last update to the system.", "Last Update") + ": ";
-                    if (sessionStorage.updateCompleted)
-                        return last_update + i18n("Right now!");
-
-                    const date = getDate();
-
-                    if (date)
-                        return last_update + date;
-
-                    return "";
+                Kirigami.Separator {
+                    Layout.fillWidth: true
                 }
 
-                function getDate(): string {
-                    // 8 digits starting with 202 or 203, not part of a longer digit run
-                    // TODO: fix this before the year 2040
-                    let match = /(?:^|\D)(20[23]\d{5})(?!\d)/.exec(AppData.osRelease["VERSION"]);
-                    if (!match)
-                        match = /(?:^|\D)(20[23]\d{5})(?!\d)/.exec(AppData.osRelease["VERSION_ID"]);
+                QQC2.Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: Kirigami.Units.largeSpacing
+                    Layout.rightMargin: Kirigami.Units.largeSpacing
+                    Layout.topMargin: Kirigami.Units.mediumSpacing
+                    Layout.bottomMargin: Kirigami.Units.mediumSpacing
+                    text: i18n("Last checked: %1", page.lastCheckedText)
+                    opacity: 0.7
+                }
+            }
+        }
 
-                    if (!match)
-                        return "";
+        Kirigami.Heading {
+            Layout.topMargin: Kirigami.Units.smallSpacing
+            text: i18n("Update Actions")
+            level: 2
+        }
 
-                    const year = parseInt(match[1].slice(0, 4), 10);
-                    const month = parseInt(match[1].slice(4, 6), 10);
-                    const day = parseInt(match[1].slice(6, 8), 10);
+        FC.FormCard {
+            Layout.fillWidth: true
 
-                    // Make sure the result is a valid date, not any 8-digit string that happens to start with 202/203
-                    const date = new Date(year, month - 1, day);
-                    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
-                        return "";
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.margins: Kirigami.Units.largeSpacing
+                spacing: Kirigami.Units.largeSpacing
 
-                    return Qt.formatDate(date, "d MMMM yyyy");
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: pageContents.width * 0.52
+                    spacing: Kirigami.Units.mediumSpacing
+
+                    QQC2.Button {
+                        id: updateButton
+                        Layout.fillWidth: true
+                        text: AppState.updateRunning ? i18n("Updating System…") : i18n("Update System")
+                        icon.name: AppState.updateRunning ? "system-software-update-symbolic" : "download-symbolic"
+                        enabled: updateAction.enabled
+                        highlighted: true
+                        onClicked: updateAction.trigger()
+                    }
+
+                    QQC2.Button {
+                        Layout.fillWidth: true
+                        text: i18n("Refresh Status")
+                        icon.name: "view-refresh-symbolic"
+                        enabled: !AppState.commandRunning && !page.updateStatusRefreshed
+                        onClicked: {
+                            AppData.reloadOstree(() => {
+                                page.lastCheckedText = Qt.formatDate(new Date(), "d MMMM yyyy");
+                                page.updateStatusRefreshed = true;
+                                showPassiveNotification(i18n("System update status refreshed."), Kirigami.short);
+                            });
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
+                    spacing: Kirigami.Units.smallSpacing
+
+                    QQC2.Label {
+                        Layout.bottomMargin: Kirigami.Units.smallSpacing
+                        text: i18n("Included components:")
+                        font.weight: Font.Medium
+                    }
+
+                    Repeater {
+                        model: [i18n("Bazzite OS"), i18n("Flatpak Packages"), i18n("Gaming components")]
+
+                        delegate: RowLayout {
+                            required property string modelData
+                            spacing: Kirigami.Units.smallSpacing
+
+                            Kirigami.Icon {
+                                Layout.preferredWidth: Kirigami.Units.iconSizes.small
+                                Layout.preferredHeight: Kirigami.Units.iconSizes.small
+                                source: "checkmark-symbolic"
+                                color: Kirigami.Theme.positiveTextColor
+                            }
+
+                            QQC2.Label {
+                                Layout.fillWidth: true
+                                text: modelData
+                                wrapMode: Text.WordWrap
+                            }
+                        }
+                    }
                 }
             }
 
@@ -258,76 +361,31 @@ Kirigami.Page {
                 description: i18n("Make sure the config file (/etc/bazzite-updater/config.ini) is present.")
             }
         }
-        UpdateSteps {}
+
         Item {
-            implicitWidth: Kirigami.Units.gridUnit * 19
+            id: centeredStepsHost
+            Layout.fillWidth: true
+            implicitHeight: stepsContent.implicitHeight
+            visible: AppState.updateRunning || AppState.commandSucceeded || SystemUpdateBackend.blockUpdate
+
+            UpdateSteps {
+                id: stepsContent
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.min(centeredStepsHost.width * 0.72, Kirigami.Units.gridUnit * 34)
+            }
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.minimumHeight: Kirigami.Units.gridUnit
         }
     }
 
-    // Resolves https://github.com/rfrench3/bazzite-updater/issues/56
-    RowLayout {
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: Kirigami.Units.gridUnit
 
-        QQC2.Label {
-            id: storageLabel
-            // the double arg keeps the confusing "%1%" out of a translation string
-            text: i18nc("progress bar displaying used storage space vs total available space", "System Drive Used (%1)", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / AppData.storageSpace.total)))
-
-            // Putting colors here instead of just in the progress bar to avoid "binding loop detected" spam
-            readonly property color okColor: Kirigami.Theme.highlightColor
-            readonly property color warnColor: Kirigami.Theme.neutralTextColor
-            readonly property color critColor: Kirigami.Theme.negativeTextColor
-        }
-        QQC2.ProgressBar {
-            id: storageBar
-            from: 0
-            to: AppData.storageSpace.total
-            value: AppData.storageSpace.used
-
-            property color barColor: {
-                const ratio = AppData.storageSpace.used / Math.max(1, AppData.storageSpace.total);
-                if (ratio > 0.9)
-                    return storageLabel.critColor;
-                if (ratio > 0.7)
-                    return storageLabel.warnColor;
-                return storageLabel.okColor;
-            }
-
-            Behavior on barColor {
-                ColorAnimation {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on value {
-                NumberAnimation {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on to {
-                NumberAnimation {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Kirigami.Theme.inherit: false
-            Kirigami.Theme.highlightColor: barColor
-            Kirigami.Theme.focusColor: barColor
-            Kirigami.Theme.alternateBackgroundColor: barColor
-
-            palette.highlight: barColor
-            palette.dark: barColor
-        }
-    }
 
     ConsoleDrawer {
         id: consoleDrawer
+        drawerOpen: false
         model: SystemUpdateBackend.consoleModel
 
         readonly property ostreeDeployment __img: AppData.ostree.deployments.find(img => img.isCurrent)
@@ -352,7 +410,6 @@ Kirigami.Page {
             Layout.fillHeight: true
         }
 
-        // displays useful information in a page users usually screenshot when something goes wrong
         QQC2.Label {
             text: consoleDrawer.includeAtStart
             color: systemPalette.placeholderText
