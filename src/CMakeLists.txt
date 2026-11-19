@@ -67,6 +67,7 @@ ecm_target_qml_sources(bazzite-updater
     ${COMP_DIR}/AppDialog.qml
     ${COMP_DIR}/AppDialogManager.qml
     ${COMP_DIR}/AppPage.qml
+    ${COMP_DIR}/StorageStatusFooter.qml
     ${COMP_DIR}/AsyncLoader.qml
     ${COMP_DIR}/PageContentLayout.qml
     ${COMP_DIR}/QmlUtils.qml

@@ -85,7 +85,8 @@ StatefulApp.StatefulWindow {
         modal: root.width < Kirigami.Units.gridUnit * 72
         drawerOpen: root.width >= Kirigami.Units.gridUnit * 72 || (modal && navigationFocus)
         handleVisible: modal
-        collapsible: modal
+        collapsible: false
+        collapsed: false
         property bool navigationFocus: false
 
         Behavior on width {
@@ -113,7 +114,7 @@ StatefulApp.StatefulWindow {
             }
             return maxWidth;
         }
-        width: modal ? Math.min(root.width * 0.82, Kirigami.Units.gridUnit * 18) : Math.max(Kirigami.Units.gridUnit * 14, getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4))
+        width: modal ? Math.min(root.width * 0.56, Kirigami.Units.gridUnit * 17) : Math.max(Kirigami.Units.gridUnit * 14, getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4))
 
         Shortcut {
             sequences: [StandardKey.Back, StandardKey.Close, "F1", "Ctrl+M", "Escape"]
