@@ -283,15 +283,18 @@ Kirigami.ScrollablePage {
             FC.FormCard {
             Layout.fillWidth: true
 
-            RowLayout {
+            GridLayout {
                 Layout.fillWidth: true
                 Layout.margins: Kirigami.Units.largeSpacing
-                spacing: Kirigami.Units.largeSpacing
+                columns: page.availableWidth < Kirigami.Units.gridUnit * 38 ? 1 : 2
+                columnSpacing: Kirigami.Units.largeSpacing
+                rowSpacing: Kirigami.Units.largeSpacing
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.columnSpan: 1
                     Layout.minimumWidth: 0
-                    Layout.preferredWidth: pageContents.width * 0.52
+                    Layout.preferredWidth: page.availableWidth < Kirigami.Units.gridUnit * 38 ? pageContents.width : pageContents.width * 0.52
                     spacing: Kirigami.Units.mediumSpacing
 
                     QQC2.Button {
@@ -321,6 +324,7 @@ Kirigami.ScrollablePage {
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.columnSpan: 1
                     Layout.minimumWidth: 0
                     Layout.alignment: Qt.AlignVCenter
                     spacing: Kirigami.Units.smallSpacing

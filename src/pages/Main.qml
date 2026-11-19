@@ -67,7 +67,7 @@ StatefulApp.StatefulWindow {
                 return;
             }
 
-            if (button_down && buttonId === 13) { // Right shoulder: move focus to the sidebar
+            if (globalDrawer.modal && button_down && buttonId === 13) { // Right shoulder: open navigation
                 globalDrawer.navigationFocus = true;
                 return;
             }
@@ -82,10 +82,10 @@ StatefulApp.StatefulWindow {
     globalDrawer: Kirigami.GlobalDrawer {
         id: globalDrawer
 
-        modal: false
-        drawerOpen: true
-        handleVisible: false
-        collapsible: false
+        modal: root.width < Kirigami.Units.gridUnit * 72
+        drawerOpen: root.width >= Kirigami.Units.gridUnit * 72 || (modal && navigationFocus)
+        handleVisible: modal
+        collapsible: modal
         property bool navigationFocus: false
 
         Behavior on width {
@@ -113,7 +113,7 @@ StatefulApp.StatefulWindow {
             }
             return maxWidth;
         }
-        width: Math.max(Kirigami.Units.gridUnit * 14, getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4))
+        width: modal ? Math.min(root.width * 0.82, Kirigami.Units.gridUnit * 18) : Math.max(Kirigami.Units.gridUnit * 14, getMaxActionTextWidth() + Kirigami.Units.iconSizes.medium + (Kirigami.Units.largeSpacing * 4))
 
         Shortcut {
             sequences: [StandardKey.Back, StandardKey.Close, "F1", "Ctrl+M", "Escape"]
@@ -159,7 +159,7 @@ StatefulApp.StatefulWindow {
         Shortcut {
             sequences: ["Right"]
             context: Qt.ApplicationShortcut
-            enabled: !globalDrawer.navigationFocus && !AppDialogManager.activeDialog
+            enabled: globalDrawer.modal && !globalDrawer.navigationFocus && !AppDialogManager.activeDialog
             onActivated: globalDrawer.navigationFocus = true
         }
 
@@ -316,6 +316,8 @@ StatefulApp.StatefulWindow {
 
             switch (buttonId) {
             case 0: // A
+                if (modal)
+                    navigationFocus = false;
                 break;
             case 1: // B
                 navigationFocus = false;
@@ -466,7 +468,7 @@ StatefulApp.StatefulWindow {
 
     Rectangle {
         id: storageFooter
-        anchors.left: pageStack.left
+        anchors.left: globalDrawer.modal ? parent.left : pageStack.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         height: storageLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
@@ -489,6 +491,7 @@ StatefulApp.StatefulWindow {
 
             QQC2.Label {
                 Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
                 Layout.maximumWidth: Kirigami.Units.gridUnit * 20
                 text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
                 elide: Text.ElideRight
@@ -496,7 +499,7 @@ StatefulApp.StatefulWindow {
 
             QQC2.ProgressBar {
                 Layout.fillWidth: true
-                Layout.minimumWidth: Kirigami.Units.gridUnit * 8
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 4
                 Layout.maximumWidth: Kirigami.Units.gridUnit * 18
                 height: Kirigami.Units.smallMediumSpacing
                 Layout.alignment: Qt.AlignVCenter
