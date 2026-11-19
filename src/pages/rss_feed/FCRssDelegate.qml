@@ -4,7 +4,9 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Controls as QQC2
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FC
 
 import io.github.rfrench3.bazzite_updater
@@ -16,13 +18,48 @@ FormCardCollapsible {
     required property string title
     required property string content
 
-    topComponent: FC.FormTextDelegate {
-        text: "Title: %1<br>Date: %2<br>Link: %3".arg(delegate.title).arg(delegate.formatRssDate(delegate.updated)).arg(`<a href="${delegate.link}">${delegate.link}</a>`)
-        textItem.textFormat: Text.RichText
-        textItem.wrapMode: Text.Wrap
+    topComponent: Item {
+        Layout.fillWidth: true
+        implicitHeight: articleHeader.implicitHeight + Kirigami.Units.largeSpacing * 2
+        implicitWidth: articleHeader.implicitWidth
 
-        textItem.onLinkActivated: url => Qt.openUrlExternally(url)
+        RowLayout {
+            id: articleHeader
+            anchors.fill: parent
+            anchors.leftMargin: Kirigami.Units.largeSpacing
+            anchors.rightMargin: Kirigami.Units.largeSpacing
+            anchors.topMargin: Kirigami.Units.largeSpacing
+            anchors.bottomMargin: Kirigami.Units.largeSpacing
+            spacing: Kirigami.Units.largeSpacing
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Kirigami.Units.smallSpacing
+
+                Kirigami.Heading {
+                    Layout.fillWidth: true
+                    level: 3
+                    text: delegate.title
+                    wrapMode: Text.WordWrap
+                }
+
+                QQC2.Label {
+                    text: delegate.formatRssDate(delegate.updated)
+                    opacity: 0.7
+                }
+            }
+
+            QQC2.ToolButton {
+                text: i18n("Open")
+                icon.name: "internet-web-browser-symbolic"
+                display: QQC2.AbstractButton.IconOnly
+                Accessible.name: i18n("Open link")
+                onClicked: Qt.openUrlExternally(delegate.link)
+            }
+        }
     }
+
+    buttonText: expanded ? i18n("Read less") : i18n("Read more")
 
     FC.AbstractFormDelegate {
         id: abstractDelegate

@@ -18,7 +18,7 @@ import QtQml.XmlListModel
 AppPage {
     id: page
 
-    topPadding: Kirigami.Units.largeSpacing * 4
+    topPadding: Kirigami.Units.largeSpacing * 2
 
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("Announcements")
 
@@ -28,7 +28,9 @@ AppPage {
     }
 
     FC.FormCard {
-
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 56
+        Layout.alignment: Qt.AlignHCenter
         visible: modelLoader.item?.status !== XmlListModel.Ready
 
         FC.FormPlaceholderMessageDelegate {
@@ -87,6 +89,8 @@ AppPage {
             required property string content
 
             Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 56
+            Layout.alignment: Qt.AlignHCenter
 
             Item {
                 implicitHeight: Kirigami.Units.mediumSpacing
