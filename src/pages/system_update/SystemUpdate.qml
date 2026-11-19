@@ -374,6 +374,7 @@ Kirigami.ScrollablePage {
                 width: Math.min(centeredStepsHost.width * 0.72, Kirigami.Units.gridUnit * 34)
             }
         }
+    }
 
     ConsoleDrawer {
         id: consoleDrawer
