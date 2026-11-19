@@ -187,17 +187,20 @@ Kirigami.ScrollablePage {
         }
     }
 
-    ColumnLayout {
-        id: pageContents
-        Layout.alignment: Qt.AlignHCenter
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 48
-        Layout.leftMargin: Kirigami.Units.gridUnit
-        Layout.rightMargin: Kirigami.Units.gridUnit
-        spacing: Kirigami.Units.gridUnit
+    Item {
+        id: pageContentHost
+        width: page.availableWidth
+        implicitHeight: pageContents.implicitHeight
 
-        RowLayout {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.topMargin: Kirigami.Units.gridUnit
+        ColumnLayout {
+            id: pageContents
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(parent.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
+            spacing: Kirigami.Units.gridUnit
+
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: Kirigami.Units.gridUnit
             spacing: Kirigami.Units.largeSpacing
 
             Item {
@@ -218,11 +221,11 @@ Kirigami.ScrollablePage {
             }
         }
 
-        FC.FormCard {
-            Layout.fillWidth: true
+            FC.FormCard {
+                Layout.fillWidth: true
 
-            ColumnLayout {
-                spacing: 0
+                ColumnLayout {
+                    spacing: 0
 
                 RowLayout {
                     Layout.fillWidth: true
@@ -271,13 +274,13 @@ Kirigami.ScrollablePage {
             }
         }
 
-        Kirigami.Heading {
-            Layout.topMargin: Kirigami.Units.smallSpacing
-            text: i18n("Update Actions")
-            level: 2
-        }
+            Kirigami.Heading {
+                Layout.topMargin: Kirigami.Units.smallSpacing
+                text: i18n("Update Actions")
+                level: 2
+            }
 
-        FC.FormCard {
+            FC.FormCard {
             Layout.fillWidth: true
 
             RowLayout {
@@ -365,17 +368,18 @@ Kirigami.ScrollablePage {
             }
         }
 
-        Item {
-            id: centeredStepsHost
-            Layout.fillWidth: true
-            implicitHeight: stepsContent.implicitHeight
-            visible: AppState.updateRunning || AppState.commandSucceeded || SystemUpdateBackend.blockUpdate
+            Item {
+                id: centeredStepsHost
+                Layout.fillWidth: true
+                implicitHeight: stepsContent.implicitHeight
+                visible: AppState.updateRunning || AppState.commandSucceeded || SystemUpdateBackend.blockUpdate
 
             UpdateSteps {
                 id: stepsContent
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(centeredStepsHost.width * 0.72, Kirigami.Units.gridUnit * 34)
             }
+        }
         }
     }
 
