@@ -18,17 +18,14 @@ AppPage {
 
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("Other Utilities")
 
+    readonly property alias consolePanel: consoleDrawer
     drawer: consoleDrawer
-    actionToggleDrawer: toggleConsole
 
-    actions: [
-        Kirigami.Action {
-            id: toggleConsole
-            text: i18n("Toggle Console") + GP.Labels.spacer + GP.Labels.north
-            shortcut: "F12"
-            onTriggered: consoleDrawer.drawerOpen = !consoleDrawer.drawerOpen
-        }
-    ]
+
+    Shortcut {
+        sequence: "F12"
+        onActivated: consoleDrawer.drawerOpen = !consoleDrawer.drawerOpen
+    }
 
     GP.ScrollHandler {
         target: page.focusedViewCard ? getScrollbar(page.focusedViewCard) : page.scrollBar

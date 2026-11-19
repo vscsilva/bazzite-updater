@@ -19,6 +19,7 @@ Kirigami.ScrollablePage {
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("System Update")
 
     property alias consoleDrawerOpen: consoleDrawer.drawerOpen
+    readonly property alias consolePanel: consoleDrawer
     property string lastCheckedText: Qt.locale().toString(new Date(), Locale.ShortFormat)
     property bool updateStatusRefreshed: false
 
@@ -54,7 +55,23 @@ Kirigami.ScrollablePage {
         }
     }
 
-    actions: []
+    titleDelegate: RowLayout {
+        width: page.width
+        spacing: Kirigami.Units.largeSpacing
+
+        Kirigami.Heading {
+            Layout.fillWidth: true
+            text: page.title
+            level: 2
+            elide: Text.ElideRight
+        }
+
+        QQC2.Switch {
+            text: i18n("Show Console")
+            checked: consoleDrawer.drawerOpen
+            onToggled: toggleConsoleDrawer(checked)
+        }
+    }
 
     Kirigami.Action {
         id: updateAction
@@ -98,23 +115,6 @@ Kirigami.ScrollablePage {
         }
     }
 
-    titleDelegate: RowLayout {
-        width: page.width
-        spacing: Kirigami.Units.largeSpacing
-
-        Kirigami.Heading {
-            Layout.fillWidth: true
-            text: page.title
-            level: 2
-            elide: Text.ElideRight
-        }
-
-        QQC2.Switch {
-            text: i18n("Show Console")
-            checked: consoleDrawer.drawerOpen
-            onToggled: toggleConsoleDrawer(checked)
-        }
-    }
 
     AppDialog {
         id: rebootAfterUpdateDialog

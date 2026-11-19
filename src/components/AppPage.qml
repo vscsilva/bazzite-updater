@@ -1,10 +1,33 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FC
 
 FC.FormCardPage {
     id: root
+
+    titleDelegate: RowLayout {
+        width: root.width
+        spacing: Kirigami.Units.largeSpacing
+
+        Kirigami.Heading {
+            Layout.fillWidth: true
+            text: root.title
+            level: 2
+            elide: Text.ElideRight
+        }
+
+        Switch {
+            visible: root.drawer !== null
+            text: i18n("Show Console")
+            checked: root.drawer?.drawerOpen ?? false
+            onToggled: {
+                if (root.drawer)
+                    root.drawer.drawerOpen = checked;
+            }
+        }
+    }
     function grabScrollbar(item: Item): ScrollBar {
         if (item.contentItem?.ScrollBar?.vertical)
             return item.contentItem.ScrollBar.vertical;
