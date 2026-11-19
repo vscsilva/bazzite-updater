@@ -62,8 +62,13 @@ StatefulApp.StatefulWindow {
                 if (root.pageStack.currentItem.moreHandleInput(buttonId, button_down))
                     return;
 
-            if (globalDrawer.drawerOpen) {
+            if (globalDrawer.drawerOpen && globalDrawer.navigationFocus) {
                 globalDrawer.handleInput(buttonId, button_down);
+                return;
+            }
+
+            if (button_down && buttonId === 13) { // Right shoulder: move focus to the sidebar
+                globalDrawer.navigationFocus = true;
                 return;
             }
 
@@ -81,6 +86,7 @@ StatefulApp.StatefulWindow {
         drawerOpen: true
         handleVisible: false
         collapsible: false
+        property bool navigationFocus: false
 
         Behavior on width {
             NumberAnimation {
@@ -132,15 +138,29 @@ StatefulApp.StatefulWindow {
         Shortcut {
             sequences: ["Up"]
             context: Qt.ApplicationShortcut
-            enabled: globalDrawer.drawerOpen && !AppDialogManager.activeDialog
+            enabled: globalDrawer.navigationFocus && !AppDialogManager.activeDialog
             onActivated: globalDrawer.__navigateGlobalDrawer(-1)
         }
 
         Shortcut {
             sequences: ["Down"]
             context: Qt.ApplicationShortcut
-            enabled: globalDrawer.drawerOpen && !AppDialogManager.activeDialog
+            enabled: globalDrawer.navigationFocus && !AppDialogManager.activeDialog
             onActivated: globalDrawer.__navigateGlobalDrawer(1)
+        }
+
+        Shortcut {
+            sequences: ["Left"]
+            context: Qt.ApplicationShortcut
+            enabled: globalDrawer.navigationFocus && !AppDialogManager.activeDialog
+            onActivated: globalDrawer.navigationFocus = false
+        }
+
+        Shortcut {
+            sequences: ["Right"]
+            context: Qt.ApplicationShortcut
+            enabled: !globalDrawer.navigationFocus && !AppDialogManager.activeDialog
+            onActivated: globalDrawer.navigationFocus = true
         }
 
         QQC2.ActionGroup {
@@ -297,6 +317,9 @@ StatefulApp.StatefulWindow {
             switch (buttonId) {
             case 0: // A
                 break;
+            case 1: // B
+                navigationFocus = false;
+                break;
             case 2: // X
                 actionQuit.triggered();
                 break;
@@ -308,6 +331,9 @@ StatefulApp.StatefulWindow {
                 break;
             case 12: // Dpad Down
                 __navigateGlobalDrawer(1);
+                break;
+            case 14: // Left shoulder
+                navigationFocus = false;
                 break;
             }
         }
@@ -438,33 +464,25 @@ StatefulApp.StatefulWindow {
         }
     }
 
-    RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Kirigami.Units.gridUnit
-        width: Math.min(parent.width - globalDrawer.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 38)
-        x: globalDrawer.width + Math.max(0, (parent.width - globalDrawer.width - width) / 2)
-        spacing: Kirigami.Units.gridUnit
-        z: 100
+    footer: QQC2.ToolBar {
+        contentItem: RowLayout {
+            spacing: Kirigami.Units.largeSpacing
 
-        QQC2.Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
-            font: Qt.font({
-                family: Kirigami.Theme.defaultFont.family,
-                pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.15,
-                weight: Kirigami.Theme.defaultFont.weight
-            })
-        }
+            QQC2.Label {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+                elide: Text.ElideRight
+            }
 
-        QQC2.ProgressBar {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 22
-            Layout.maximumWidth: Kirigami.Units.gridUnit * 22
-            Layout.preferredHeight: Kirigami.Units.smallMediumSpacing
-            Layout.alignment: Qt.AlignVCenter
-            from: 0
-            to: AppData.storageSpace.total
-            value: AppData.storageSpace.used
+            QQC2.ProgressBar {
+                Layout.preferredWidth: Math.min(Kirigami.Units.gridUnit * 18, parent.width * 0.4)
+                Layout.preferredHeight: Kirigami.Units.smallMediumSpacing
+                Layout.alignment: Qt.AlignVCenter
+                from: 0
+                to: AppData.storageSpace.total
+                value: AppData.storageSpace.used
+            }
         }
     }
 

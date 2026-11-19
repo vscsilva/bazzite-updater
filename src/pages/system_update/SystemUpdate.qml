@@ -13,13 +13,13 @@ import org.kde.kirigamiaddons.formcard as FC
 import io.github.rfrench3.bazzite_updater
 import io.github.rfrench3.controllable as GP
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     id: page
 
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("System Update")
 
     property alias consoleDrawerOpen: consoleDrawer.drawerOpen
-    property string lastCheckedText: Qt.formatDate(new Date(), "d MMMM yyyy")
+    property string lastCheckedText: Qt.locale().toString(new Date(), Locale.ShortFormat)
     property bool updateStatusRefreshed: false
 
 
@@ -84,7 +84,7 @@ Kirigami.Page {
                 sessionStorage.mainText = i18n("System Updated!");
 
                 AppData.reloadOstree(() => {
-                    page.lastCheckedText = Qt.formatDate(new Date(), "d MMMM yyyy");
+                    page.lastCheckedText = Qt.locale().toString(new Date(), Locale.ShortFormat);
                     page.updateStatusRefreshed = true;
                     if (!AppData.ostree.onLatestDeployment())
                         AppDialogManager.show(rebootAfterUpdateDialog);
@@ -189,14 +189,12 @@ Kirigami.Page {
 
     ColumnLayout {
         id: pageContents
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: Math.min(parent.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
+        width: Math.min(page.availableWidth - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
         spacing: Kirigami.Units.gridUnit
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            Layout.topMargin: Kirigami.Units.gridUnit * 3.5
+            Layout.topMargin: Kirigami.Units.gridUnit
             spacing: Kirigami.Units.largeSpacing
 
             Item {
@@ -286,6 +284,7 @@ Kirigami.Page {
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                     Layout.preferredWidth: pageContents.width * 0.52
                     spacing: Kirigami.Units.mediumSpacing
 
@@ -306,7 +305,7 @@ Kirigami.Page {
                         enabled: !AppState.commandRunning && !page.updateStatusRefreshed
                         onClicked: {
                             AppData.reloadOstree(() => {
-                                page.lastCheckedText = Qt.formatDate(new Date(), "d MMMM yyyy");
+                                page.lastCheckedText = Qt.locale().toString(new Date(), Locale.ShortFormat);
                                 page.updateStatusRefreshed = true;
                                 showPassiveNotification(i18n("System update status refreshed."), Kirigami.short);
                             });
@@ -316,6 +315,7 @@ Kirigami.Page {
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                     Layout.alignment: Qt.AlignVCenter
                     spacing: Kirigami.Units.smallSpacing
 
@@ -374,14 +374,6 @@ Kirigami.Page {
                 width: Math.min(centeredStepsHost.width * 0.72, Kirigami.Units.gridUnit * 34)
             }
         }
-
-        Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: Kirigami.Units.gridUnit
-        }
-    }
-
-
 
     ConsoleDrawer {
         id: consoleDrawer

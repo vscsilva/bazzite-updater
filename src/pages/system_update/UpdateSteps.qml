@@ -31,18 +31,7 @@ ColumnLayout {
             Label {
                 Layout.preferredWidth: Kirigami.Units.gridUnit * 5
                 horizontalAlignment: Text.AlignLeft
-                text: {
-                    switch (del.module.toLowerCase()) {
-                    case "system":
-                        return i18n("System");
-                    case "brew":
-                        return i18n("Brew");
-                    case "flatpak":
-                        return i18n("Flatpak");
-                    default:
-                        return del.module.charAt(0).toUpperCase() + del.module.slice(1);
-                    }
-                }
+                text: del.module.charAt(0).toUpperCase() + del.module.slice(1)
             }
 
             ProgressBar {
