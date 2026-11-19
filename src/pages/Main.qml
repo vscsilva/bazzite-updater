@@ -465,6 +465,14 @@ StatefulApp.StatefulWindow {
     }
 
     footer: QQC2.ToolBar {
+        background: Rectangle {
+            color: Kirigami.Theme.backgroundColor
+            Kirigami.Separator {
+                anchors.top: parent.top
+                width: parent.width
+            }
+        }
+
         contentItem: RowLayout {
             spacing: Kirigami.Units.largeSpacing
 
