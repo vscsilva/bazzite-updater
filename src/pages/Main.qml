@@ -466,43 +466,24 @@ StatefulApp.StatefulWindow {
         }
     }
 
-    Rectangle {
-        id: storageFooter
-        anchors.left: globalDrawer.modal ? parent.left : pageStack.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: storageLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
-        color: Kirigami.Theme.backgroundColor
-        z: 10
-
-        Kirigami.Separator {
-            anchors.top: parent.top
-            width: parent.width
-        }
-
-        RowLayout {
-            id: storageLayout
-            anchors.fill: parent
-            anchors.leftMargin: Kirigami.Units.largeSpacing
-            anchors.rightMargin: Kirigami.Units.largeSpacing
-            anchors.topMargin: Kirigami.Units.largeSpacing
-            anchors.bottomMargin: Kirigami.Units.largeSpacing
-            spacing: Kirigami.Units.largeSpacing
+    footer: QQC2.ToolBar {
+        contentItem: GridLayout {
+            columns: root.width < Kirigami.Units.gridUnit * 48 ? 1 : 2
+            columnSpacing: Kirigami.Units.largeSpacing
+            rowSpacing: Kirigami.Units.smallSpacing
 
             QQC2.Label {
-                Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
-                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
                 text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
                 elide: Text.ElideRight
             }
 
             QQC2.ProgressBar {
                 Layout.fillWidth: true
-                Layout.minimumWidth: Kirigami.Units.gridUnit * 4
-                Layout.maximumWidth: Kirigami.Units.gridUnit * 18
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 8
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
                 height: Kirigami.Units.smallMediumSpacing
-                Layout.alignment: Qt.AlignVCenter
                 from: 0
                 to: AppData.storageSpace.total
                 value: AppData.storageSpace.used

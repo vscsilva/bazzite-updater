@@ -292,7 +292,6 @@ Kirigami.ScrollablePage {
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    Layout.columnSpan: 1
                     Layout.minimumWidth: 0
                     Layout.preferredWidth: page.availableWidth < Kirigami.Units.gridUnit * 38 ? pageContents.width : pageContents.width * 0.52
                     spacing: Kirigami.Units.mediumSpacing
