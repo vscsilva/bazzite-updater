@@ -17,6 +17,29 @@ Kirigami.ScrollablePage {
     id: page
 
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("System Update")
+    footer: QQC2.ToolBar {
+        contentItem: RowLayout {
+            spacing: Kirigami.Units.mediumSpacing
+
+            QQC2.Label {
+                Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+                text: page.width < Kirigami.Units.gridUnit * 48
+                    ? i18nc("compact storage usage indicator", "Disk: %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+                    : i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+                elide: Text.ElideRight
+            }
+
+            QQC2.ProgressBar {
+                Layout.preferredWidth: Math.min(page.width * 0.3, Kirigami.Units.gridUnit * 24)
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 6
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+                from: 0
+                to: AppData.storageSpace.total
+                value: AppData.storageSpace.used
+            }
+        }
+    }
 
     property alias consoleDrawerOpen: consoleDrawer.drawerOpen
     readonly property alias consolePanel: consoleDrawer
@@ -187,17 +210,12 @@ Kirigami.ScrollablePage {
         }
     }
 
-    Item {
-        id: pageContentHost
-        x: 0
-        width: page.availableWidth
-        implicitHeight: pageContents.implicitHeight
-
-        ColumnLayout {
-            id: pageContents
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: Math.min(parent.width - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
-            spacing: Kirigami.Units.gridUnit
+    ColumnLayout {
+        id: pageContents
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 48
+        Layout.alignment: Qt.AlignHCenter
+        spacing: Kirigami.Units.gridUnit
 
             RowLayout {
                 Layout.alignment: Qt.AlignHCenter
@@ -287,14 +305,14 @@ Kirigami.ScrollablePage {
             GridLayout {
                 Layout.fillWidth: true
                 Layout.margins: Kirigami.Units.largeSpacing
-                columns: page.availableWidth < Kirigami.Units.gridUnit * 38 ? 1 : 2
+                columns: pageContents.width < Kirigami.Units.gridUnit * 38 ? 1 : 2
                 columnSpacing: Kirigami.Units.largeSpacing
                 rowSpacing: Kirigami.Units.largeSpacing
 
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 0
-                    Layout.preferredWidth: page.availableWidth < Kirigami.Units.gridUnit * 38 ? page.availableWidth - Kirigami.Units.largeSpacing * 2 : pageContents.width * 0.52
+                    Layout.preferredWidth: pageContents.width < Kirigami.Units.gridUnit * 38 ? pageContents.width : pageContents.width * 0.52
                     spacing: Kirigami.Units.mediumSpacing
 
                     QQC2.Button {
@@ -383,7 +401,6 @@ Kirigami.ScrollablePage {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(centeredStepsHost.width * 0.72, Kirigami.Units.gridUnit * 34)
             }
-        }
         }
     }
 

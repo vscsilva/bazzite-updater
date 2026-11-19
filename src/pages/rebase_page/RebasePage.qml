@@ -5,6 +5,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 
 import org.kde.kirigami as Kirigami
@@ -163,6 +164,29 @@ AppPage {
         })
 
     title: GP.Labels.east + GP.Labels.spacer_large + i18n("Rebase Helper")
+    footer: QQC2.ToolBar {
+        contentItem: RowLayout {
+            spacing: Kirigami.Units.mediumSpacing
+
+            QQC2.Label {
+                Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+                text: page.width < Kirigami.Units.gridUnit * 48
+                    ? i18nc("compact storage usage indicator", "Disk: %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+                    : i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
+                elide: Text.ElideRight
+            }
+
+            QQC2.ProgressBar {
+                Layout.preferredWidth: Math.min(page.width * 0.3, Kirigami.Units.gridUnit * 24)
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 6
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+                from: 0
+                to: AppData.storageSpace.total
+                value: AppData.storageSpace.used
+            }
+        }
+    }
 
     readonly property alias consolePanel: consoleDrawer
 

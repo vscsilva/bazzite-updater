@@ -466,49 +466,6 @@ StatefulApp.StatefulWindow {
         }
     }
 
-    Rectangle {
-        id: storageFooter
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: storageLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
-        color: Kirigami.Theme.backgroundColor
-        z: 10
 
-        Kirigami.Separator {
-            anchors.top: parent.top
-            width: parent.width
-        }
-
-        RowLayout {
-            id: storageLayout
-            anchors.fill: parent
-            anchors.leftMargin: Kirigami.Units.largeSpacing
-            anchors.rightMargin: Kirigami.Units.largeSpacing
-            anchors.topMargin: Kirigami.Units.largeSpacing
-            anchors.bottomMargin: Kirigami.Units.largeSpacing
-            spacing: Kirigami.Units.mediumSpacing
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
-                text: root.width < Kirigami.Units.gridUnit * 48
-                    ? i18nc("compact storage usage indicator", "Disk: %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
-                    : i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
-                elide: Text.ElideRight
-            }
-
-            QQC2.ProgressBar {
-                Layout.preferredWidth: Math.min(root.width * 0.3, Kirigami.Units.gridUnit * 24)
-                Layout.minimumWidth: Kirigami.Units.gridUnit * 6
-                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
-                from: 0
-                to: AppData.storageSpace.total
-                value: AppData.storageSpace.used
-            }
-        }
-    }
-
-    pageStack.bottomPadding: storageFooter.height
     pageStack.initialPage: Qt.resolvedUrl("SystemUpdate.qml")
 }
