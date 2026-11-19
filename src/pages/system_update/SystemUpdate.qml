@@ -189,6 +189,7 @@ Kirigami.ScrollablePage {
 
     Item {
         id: pageContentHost
+        x: 0
         width: page.availableWidth
         implicitHeight: pageContents.implicitHeight
 
@@ -293,7 +294,7 @@ Kirigami.ScrollablePage {
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 0
-                    Layout.preferredWidth: page.availableWidth < Kirigami.Units.gridUnit * 38 ? pageContents.width : pageContents.width * 0.52
+                    Layout.preferredWidth: page.availableWidth < Kirigami.Units.gridUnit * 38 ? page.availableWidth - Kirigami.Units.largeSpacing * 2 : pageContents.width * 0.52
                     spacing: Kirigami.Units.mediumSpacing
 
                     QQC2.Button {
@@ -323,7 +324,7 @@ Kirigami.ScrollablePage {
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    Layout.columnSpan: 1
+
                     Layout.minimumWidth: 0
                     Layout.alignment: Qt.AlignVCenter
                     spacing: Kirigami.Units.smallSpacing

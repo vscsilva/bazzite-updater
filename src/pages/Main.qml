@@ -466,13 +466,28 @@ StatefulApp.StatefulWindow {
         }
     }
 
-    footer: QQC2.ToolBar {
-        implicitHeight: Kirigami.Units.gridUnit * 3
+    Rectangle {
+        id: storageFooter
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: storageLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
+        color: Kirigami.Theme.backgroundColor
+        z: 10
 
-        contentItem: RowLayout {
-            spacing: Kirigami.Units.mediumSpacing
+        Kirigami.Separator {
+            anchors.top: parent.top
+            width: parent.width
+        }
+
+        RowLayout {
+            id: storageLayout
+            anchors.fill: parent
             anchors.leftMargin: Kirigami.Units.largeSpacing
             anchors.rightMargin: Kirigami.Units.largeSpacing
+            anchors.topMargin: Kirigami.Units.largeSpacing
+            anchors.bottomMargin: Kirigami.Units.largeSpacing
+            spacing: Kirigami.Units.mediumSpacing
 
             QQC2.Label {
                 Layout.fillWidth: true
@@ -494,5 +509,6 @@ StatefulApp.StatefulWindow {
         }
     }
 
+    pageStack.bottomPadding: storageFooter.height
     pageStack.initialPage: Qt.resolvedUrl("SystemUpdate.qml")
 }
