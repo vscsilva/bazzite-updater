@@ -189,8 +189,10 @@ Kirigami.ScrollablePage {
 
     ColumnLayout {
         id: pageContents
-        width: Math.min(page.availableWidth - Kirigami.Units.gridUnit * 2, Kirigami.Units.gridUnit * 48)
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.alignment: Qt.AlignHCenter
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 48
+        Layout.leftMargin: Kirigami.Units.gridUnit
+        Layout.rightMargin: Kirigami.Units.gridUnit
         spacing: Kirigami.Units.gridUnit
 
         RowLayout {

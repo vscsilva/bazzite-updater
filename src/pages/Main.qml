@@ -464,28 +464,41 @@ StatefulApp.StatefulWindow {
         }
     }
 
-    footer: QQC2.ToolBar {
-        background: Rectangle {
-            color: Kirigami.Theme.backgroundColor
-            Kirigami.Separator {
-                anchors.top: parent.top
-                width: parent.width
-            }
+    Rectangle {
+        id: storageFooter
+        anchors.left: pageStack.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: storageLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
+        color: Kirigami.Theme.backgroundColor
+        z: 10
+
+        Kirigami.Separator {
+            anchors.top: parent.top
+            width: parent.width
         }
 
-        contentItem: RowLayout {
+        RowLayout {
+            id: storageLayout
+            anchors.fill: parent
+            anchors.leftMargin: Kirigami.Units.largeSpacing
+            anchors.rightMargin: Kirigami.Units.largeSpacing
+            anchors.topMargin: Kirigami.Units.largeSpacing
+            anchors.bottomMargin: Kirigami.Units.largeSpacing
             spacing: Kirigami.Units.largeSpacing
 
             QQC2.Label {
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
                 text: i18nc("progress bar displaying used storage space vs total available space", "System disk space used — %1", "%1%".arg(Math.floor(AppData.storageSpace.used * 100 / Math.max(1, AppData.storageSpace.total))))
                 elide: Text.ElideRight
             }
 
             QQC2.ProgressBar {
-                Layout.preferredWidth: Math.min(Kirigami.Units.gridUnit * 18, parent.width * 0.4)
-                Layout.preferredHeight: Kirigami.Units.smallMediumSpacing
+                Layout.fillWidth: true
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 8
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 18
+                height: Kirigami.Units.smallMediumSpacing
                 Layout.alignment: Qt.AlignVCenter
                 from: 0
                 to: AppData.storageSpace.total
